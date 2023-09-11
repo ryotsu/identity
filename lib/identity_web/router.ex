@@ -5,7 +5,9 @@ defmodule IdentityWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api", IdentityWeb do
+  scope "/", IdentityWeb do
     pipe_through :api
+
+    post "/identity", ContactController, :identity
   end
 end
