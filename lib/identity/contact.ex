@@ -1,6 +1,16 @@
 defmodule Identity.Contact do
+  @moduledoc """
+  Schema for Contact
+  """
   use Ecto.Schema
   import Ecto.Changeset
+
+  @type t :: %__MODULE__{
+          phone: String.t(),
+          email: String.t(),
+          is_primary: boolean,
+          primary: t | nil
+        }
 
   schema "contacts" do
     field :phone, :string, default: nil

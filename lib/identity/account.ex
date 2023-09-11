@@ -73,7 +73,8 @@ defmodule Identity.Account do
   end
 
   @type maybe_string :: nil | String.t()
-  @spec get_related_contacts(maybe_string, maybe_string) :: {:ok | nil | Contact.t(), Contact.t()}
+  @spec get_related_contacts(maybe_string, maybe_string) ::
+          {:ok | nil | Contact.t(), nil | Contact.t()}
   defp get_related_contacts(phone, email)
 
   defp get_related_contacts(nil, email) do
