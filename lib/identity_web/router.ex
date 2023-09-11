@@ -8,6 +8,6 @@ defmodule IdentityWeb.Router do
   scope "/", IdentityWeb do
     pipe_through :api
 
-    post "/identity", ContactController, :identity
+    post "/identify", ContactController, :identify
   end
 end

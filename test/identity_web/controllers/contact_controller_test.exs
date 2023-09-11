@@ -22,14 +22,14 @@ defmodule IdentityWeb.ContactControllerTest do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
   end
 
-  describe "identity" do
+  describe "identify" do
     test "blank contact details", %{conn: conn} do
-      conn = post(conn, ~p"/identity", @invalid_attrs)
+      conn = post(conn, ~p"/identify", @invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}
     end
 
     test "primary contact", %{conn: conn} do
-      conn = post(conn, ~p"/identity", @valid_contact_1)
+      conn = post(conn, ~p"/identify", @valid_contact_1)
 
       assert %{
                "primaryContactId" => _id,
@@ -40,10 +40,10 @@ defmodule IdentityWeb.ContactControllerTest do
     end
 
     test "primary and secondary contacts", %{conn: conn} do
-      conn = post(conn, ~p"/identity", @valid_contact_1)
+      conn = post(conn, ~p"/identify", @valid_contact_1)
       assert %{"primaryContactId" => id} = json_response(conn, 200)["contact"]
 
-      conn = post(conn, ~p"/identity", @linked_to_contact_1_and_2)
+      conn = post(conn, ~p"/identify", @linked_to_contact_1_and_2)
 
       assert %{
                "primaryContactId" => ^id,
@@ -54,45 +54,45 @@ defmodule IdentityWeb.ContactControllerTest do
     end
 
     test "no new info", %{conn: conn} do
-      conn = post(conn, ~p"/identity", @valid_contact_1)
+      conn = post(conn, ~p"/identify", @valid_contact_1)
       assert %{"primaryContactId" => _id} = json_response(conn, 200)["contact"]
 
-      conn = post(conn, ~p"/identity", @linked_to_contact_1_and_2)
+      conn = post(conn, ~p"/identify", @linked_to_contact_1_and_2)
       assert contact = json_response(conn, 200)["contact"]
 
-      conn = post(conn, ~p"/identity", %{phoneNumber: "123456"})
+      conn = post(conn, ~p"/identify", %{phoneNumber: "123456"})
       assert ^contact = json_response(conn, 200)["contact"]
 
-      conn = post(conn, ~p"/identity", %{email: "lorraine@hillvalley.edu"})
+      conn = post(conn, ~p"/identify", %{email: "lorraine@hillvalley.edu"})
       assert ^contact = json_response(conn, 200)["contact"]
 
-      conn = post(conn, ~p"/identity", %{email: "mcfly@hillvalley.edu"})
+      conn = post(conn, ~p"/identify", %{email: "mcfly@hillvalley.edu"})
       assert ^contact = json_response(conn, 200)["contact"]
     end
 
     test "two primary contacts", %{conn: conn} do
-      conn = post(conn, ~p"/identity", @valid_contact_1)
+      conn = post(conn, ~p"/identify", @valid_contact_1)
       assert %{"primaryContactId" => id_1} = json_response(conn, 200)["contact"]
 
-      conn = post(conn, ~p"/identity", @valid_contact_2)
+      conn = post(conn, ~p"/identify", @valid_contact_2)
       assert %{"primaryContactId" => id_2} = json_response(conn, 200)["contact"]
 
       assert id_1 != id_2
     end
 
     test "join two partitions", %{conn: conn} do
-      conn = post(conn, ~p"/identity", @valid_contact_1)
+      conn = post(conn, ~p"/identify", @valid_contact_1)
       assert %{"primaryContactId" => id_1} = json_response(conn, 200)["contact"]
 
-      conn = post(conn, ~p"/identity", @valid_contact_2)
+      conn = post(conn, ~p"/identify", @valid_contact_2)
       assert %{"primaryContactId" => id_2} = json_response(conn, 200)["contact"]
 
       assert id_1 != id_2
 
-      conn = post(conn, ~p"/identity", @linked_to_contact_1_and_2)
+      conn = post(conn, ~p"/identify", @linked_to_contact_1_and_2)
       assert %{"primaryContactId" => ^id_1} = json_response(conn, 200)["contact"]
 
-      conn = post(conn, ~p"/identity", @linked_to_contact_1_and_2)
+      conn = post(conn, ~p"/identify", @linked_to_contact_1_and_2)
       assert %{"primaryContactId" => ^id_1} = json_response(conn, 200)["contact"]
     end
   end

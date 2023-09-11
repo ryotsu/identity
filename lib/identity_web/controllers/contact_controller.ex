@@ -5,7 +5,7 @@ defmodule IdentityWeb.ContactController do
 
   action_fallback IdentityWeb.FallbackController
 
-  def identity(conn, contact_params) do
+  def identify(conn, contact_params) do
     contact_params =
       contact_params
       |> Map.update("phoneNumber", nil, fn x -> if x == "", do: nil, else: x end)
